@@ -1,16 +1,14 @@
 Time-Available version 0.01
 ===========================
 
-The README is used to introduce the module and provide instructions on
-how to install the module, any machine dependencies it may have (for
-example C compilers and installed libraries) and any other information
-that should be provided before the module is installed.
+Time::Available is used to calculate availability of some resource if start
+end end time of availability is available. That availability is calculated
+relative to some interval which is defined when new instance of module is
+created.
 
-A README file is required for CPAN modules since CPAN extracts the
-README file from a module distribution so that people browsing the
-archive can use it get an idea of the modules uses. It is usually a
-good idea to provide version information here so that people can
-decide whether fixes for the module are worth downloading.
+Time::Avail is CPAN module that started it all. However, it lacked
+calculating of availability of some interval and precision in seconds, so
+this module was born.
 
 INSTALLATION
 
@@ -25,7 +23,8 @@ DEPENDENCIES
 
 This module requires these other modules and libraries:
 
-  blah blah blah
+  Carp
+  Time::Local
 
 COPYRIGHT AND LICENCE
 
@@ -34,7 +33,5 @@ Put the correct copyright and licence information here.
 Copyright (C) 2003 by Dobrica Pavlinusic
 
 This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.1 or,
-at your option, any later version of Perl 5 you may have available.
-
+it under the same terms as Perl itself.
 

@@ -33,7 +33,7 @@ our @EXPORT_OK = (
 
 our @EXPORT;	# don't export anything by default!
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 # define some constants used later
 use constant DAY_MONDAY    => 0x01;
