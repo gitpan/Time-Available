@@ -1,4 +1,4 @@
-Time-Available version 0.01
+Time-Available version 0.03
 ===========================
 
 Time::Available is used to calculate availability of some resource if start
@@ -19,6 +19,9 @@ To install this module type the following:
    make test
    make install
 
+Users of versions older than 0.03 are encouraged to upgrade to at least
+version 0.03.
+
 DEPENDENCIES
 
 This module requires these other modules and libraries:
@@ -26,9 +29,7 @@ This module requires these other modules and libraries:
   Carp
   Time::Local
 
-COPYRIGHT AND LICENCE
-
-Put the correct copyright and licence information here.
+COPYRIGHT AND LICENSE
 
 Copyright (C) 2003 by Dobrica Pavlinusic
 

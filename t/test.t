@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-use Test::Simple tests => 14;
+use Test::Simple tests => 16;
 
 use Time::Available qw(:days :fmt_interval);
 use Time::Local;
@@ -61,3 +61,14 @@ ok($i->uptime(30000)==27900,'ok');
 ok($i->uptime(50000)==27900,'ok');
 ok($i->uptime(60000)==26400,'ok');
 
+$i = Time::Available->new( start=>'00:00', end=>'23:59', dayMask=>DAY_SUNDAY, debug=>1);
+ok($i->_dayOk(0) == 1, 'ok');
+$i = Time::Available->new( start=>'00:00', end=>'23:59', dayMask=>DAY_MONDAY, debug=>1);
+ok($i->_dayOk(1) == 1, 'ok');
+
+#		DAY_MONDAY
+#		DAY_TUESDAY
+#		DAY_WEDNESDAY
+#		DAY_THURSDAY
+#		DAY_FRIDAY
+#		DAY_SATURDAY

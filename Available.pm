@@ -33,7 +33,7 @@ our @EXPORT_OK = (
 
 our @EXPORT;	# don't export anything by default!
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 # define some constants used later
 use constant DAY_MONDAY    => 0x01;
@@ -61,12 +61,12 @@ sub new {
 	$self->{ARGS} = {@_};
 	$debug = $self->{ARGS}->{DEBUG};
 
-	croak("need start time") if (! $self->{ARGS}->{start});
+	croak("need start time") if (! defined($self->{ARGS}->{start}));
 
 	# calc start and stop seconds
 	my ($hh,$mm,$ss) = split(/:/,$self->{ARGS}->{start},3);
 	print STDERR "new: start time ",$hh||0,":",$mm||0,":",$ss||0,"\n" if ($debug);
-	croak("need at least hour specified for start time") if (! $hh);
+	croak("need at least hour specified for start time") if (! defined($hh));
 	$mm |= 0;
 	$ss |= 0;
 	$self->{start_arr} = [$ss,$mm,$hh];
@@ -77,11 +77,11 @@ sub new {
 	$start *= 60;
 	$start += $ss;
 
-	croak("need end time") if (! $self->{ARGS}->{end});
+	croak("need end time") if (! defined($self->{ARGS}->{end}));
 
 	($hh,$mm,$ss) = split(/:/,$self->{ARGS}->{end},3);
 	print STDERR "new: end time ",$hh||0,":",$mm||0,":",$ss||0,"\n" if ($debug);
-	croak("need at least hour specified for end time") if (! $hh);
+	croak("need at least hour specified for end time") if (! defined($hh));
 	$mm |= 0;
 	$ss |= 0;
 	$self->{end_arr} = [$ss,$mm,$hh];
@@ -92,7 +92,7 @@ sub new {
 	$end *= 60;
 	$end += $ss;
 
-	croak("need dayMask specified") if (! $self->{ARGS}->{dayMask});
+	croak("need dayMask specified") if (! defined($self->{ARGS}->{dayMask}));
 
 	$self->{dayMask} = $self->{ARGS}->{dayMask};
 
@@ -111,7 +111,7 @@ sub new {
 
 sub _dayOk($) {
 	my $self = shift;
-	my $day = shift || return;
+	my $day = shift || 0;
 
 	my $dayMask = $self->{dayMask};
 
