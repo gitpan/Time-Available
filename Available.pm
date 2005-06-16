@@ -33,7 +33,7 @@ our @EXPORT_OK = (
 
 our @EXPORT;	# don't export anything by default!
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 # define some constants used later
 use constant DAY_MONDAY    => 0x01;
@@ -239,7 +239,7 @@ sub downtime {
 		if ($time > $start && $time <= $end) {
 			$s = $end - $time;
 		} elsif ($time < $start) {
-			$s = $end - $start;
+			$s = 0;
 		}
 	} elsif ( $start > $end ) {	# over midnight
 		if ( $time < $end ) {
@@ -312,8 +312,8 @@ sub interval {
 	my $sec_in_day = $self->{sec_in_interval};
 	my $day = 86400;	# 24*60*60
 
-	my $loop_start_time = int($from/$day)*$day + $day;
-	my $loop_end_time = int($to/$day)*$day;
+	my $loop_start_time = int(${from}/${day})*$day + $day;
+	my $loop_end_time = int(${to}/${day})*$day;
 
 	print STDERR "loop (start - end): $loop_start_time - $loop_end_time\n" if ($debug);
 
@@ -465,6 +465,20 @@ pretty-format interval into [days]d hh:mm:ss.
 
 Original version; based somewhat on Time::Avail code
 
+=item 0.02
+
+First version which works well
+
+=item 0.03
+
+Fix intervals which start with 0 hours, and bug with sunday (it never
+matched dayMask)
+
+=item 0.04
+
+Fixed bug when interval begins in previous day and end before start of
+interval
+
 =back
 
 =head1 BUGS
@@ -492,7 +506,7 @@ Dobrica Pavlinusic, E<lt>dpavlin@rot13.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2003 by Dobrica Pavlinusic
+Copyright (C) 2003-2005 by Dobrica Pavlinusic
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
