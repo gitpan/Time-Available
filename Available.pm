@@ -33,7 +33,7 @@ our @EXPORT_OK = (
 
 our @EXPORT;	# don't export anything by default!
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 # define some constants used later
 use constant DAY_MONDAY    => 0x01;
@@ -169,6 +169,11 @@ sub _end {
 # uptime of service
 #
 
+sub _t {
+	my $t = shift || die "no t?";
+	return "$t [" . localtime($t) . "]";
+}
+
 sub uptime {
 	my $self = shift;
 
@@ -185,7 +190,7 @@ sub uptime {
 	my $start = $self->_start($time);
 	my $end = $self->_end($time);
 
-	print STDERR "start: $start end: $end time: $time [$lt[2]:$lt[1]:$lt[0]]\n" if ($debug);
+	print STDERR "uptime start: ",_t($start)," end: ",_t($end)," time: $time [$lt[2]:$lt[1]:$lt[0]]\n" if ($debug);
 
 	if ( $end > $start ) {
 		if ($time < $start) {
@@ -233,7 +238,7 @@ sub downtime {
 	my $start = $self->_start($time);
 	my $end = $self->_end($time);
 
-	print STDERR "start: $start end: $end time: $time [$lt[2]:$lt[1]:$lt[0]]\n" if ($debug);
+	print STDERR "downtime start: ",_t($start)," end: ",_t($end)," time: $time [$lt[2]:$lt[1]:$lt[0]]\n" if ($debug);
 
 	if ( $end > $start ) {
 		if ($time > $start && $time <= $end) {
@@ -296,13 +301,13 @@ sub interval {
 	my $from = shift || croak "need start time for interval";
 	my $to = shift || croak "need end time for interval";
 
-	print STDERR "from:\t$from\t",scalar localtime($from),"\n" if ($debug);
-	print STDERR "to:\t$to\t",scalar localtime($to),"\n" if ($debug);
+	print STDERR "from:\t",_t($from),"\n" if ($debug);
+	print STDERR "to:\t",_t($to),"\n" if ($debug);
 
 	my $total = 0;
 
 	# calc first day availability
-	print STDERR "t:\t$from\t",scalar localtime($from),"\n" if ($debug);
+	print STDERR "t:\t",_t($from),"\n" if ($debug);
 	$total += $self->uptime($from);
 
 	print STDERR "total: ",fmt_interval($total)," (first)\n" if ($debug);
@@ -318,17 +323,17 @@ sub interval {
 	print STDERR "loop (start - end): $loop_start_time - $loop_end_time\n" if ($debug);
 
 	for (my $t = $loop_start_time; $t < $loop_end_time; $t += $day) {
-		print STDERR "t:\t$t\t",scalar localtime($t),"\n" if ($debug);
+		print STDERR "t:\t",_($t),"\n" if ($debug);
 		$total += $sec_in_day if ($self->day_in_interval($t));
 		print STDERR "total: ",fmt_interval($total)," (loop)\n" if ($debug);
 	}
 
 	# add rest of last day
-	print STDERR "t:\t$to\t",scalar localtime($to),"\n" if ($debug);
+	print STDERR "t:\t",_t($to),"\n" if ($debug);
 
 	if ($to > $self->_start($to)) {
 		if ($to <= $self->_end($to)) {
-			$total = abs($total - $self->downtime($to));
+			$total += ( $to - $self->_start($to) );
 		} elsif($self->day_in_interval($to) && $loop_start_time < $loop_end_time) {
 			$total += $sec_in_day;
 		}
@@ -479,6 +484,11 @@ matched dayMask)
 Fixed bug when interval begins in previous day and end before start of
 interval
 
+=item 0.05
+
+Fixed another bug when interval begins in non-masked day and ends after
+begining of interval
+
 =back
 
 =head1 BUGS
@@ -506,7 +516,7 @@ Dobrica Pavlinusic, E<lt>dpavlin@rot13.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2003-2005 by Dobrica Pavlinusic
+Copyright (C) 2003-2006 by Dobrica Pavlinusic
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

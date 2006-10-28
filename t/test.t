@@ -1,10 +1,12 @@
 #!/usr/bin/perl
 
-use Test::More tests => 40;
+use Test::More tests => 41;
 use blib;
 
 use Time::Available qw(:days :fmt_interval);
 use Time::Local;
+
+my $debug = shift @ARGV;
 
 my $tz_offset = time()-timegm(localtime);
 
@@ -93,6 +95,7 @@ cmp_ok($i->_dayOk(1), '==', 1, '_dayOk(1)');
 
 
 # check for bugfix
-$i = Time::Available->new( start=>'07:00', end=>'17:00', dayMask=>DAY_WEEKDAY, debug=>1);
+$i = Time::Available->new( start=>'07:00', end=>'17:00', dayMask=>DAY_WEEKDAY, DEBUG=>$debug);
 cmp_ok($i->interval(1104358156, 1104381213), '==', 0, 'interval');
+cmp_ok($i->interval(1137933377, 1137997561), '==', 1561, 'interval');
 
